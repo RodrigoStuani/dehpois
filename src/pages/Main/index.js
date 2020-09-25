@@ -2,13 +2,15 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, TouchableHighlight, Alert, Image } from 'react-native';
+import { StyleSheet, Text, TouchableHighlight, Alert, Image, Switch } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-community/async-storage';
 import queryString from 'query-string';
 import storageConfig from '../../config/storage';
+import { ThemeProvider } from 'styled-components';
 
 import { Container, TitleWrapper } from './styles';
+import themes from '../../themes';
 
 import api from '../../services/api';
 
@@ -97,63 +99,81 @@ export default function Main() {
   const identity = handleInputPersist(storageConfig.identity);
   const origin = handleInputPersist(storageConfig.origin);
 
+  const [ dark, setDark ] = useState();
+
   return (
-    <Container>
-      <TitleWrapper>
-        <Image source={require('../../assets/dehpois-logo.png')}/>
-      </TitleWrapper>
+    <ThemeProvider
+      theme={dark ? themes.darkTheme : themes.lightTheme}
+    >
+      <Container>
+        <TitleWrapper>
+          <Image source={require('../../assets/dehpois-logo.png')}/>
+        </TitleWrapper>
 
-      <TextInput
-        {...account}
-        style={styles.input}
-        placeholder={'Account'}
-      />
+        <TextInput
+          {...account}
+          style={styles.input}
+          placeholder={'Account'}
+        />
 
-      <TextInput
-        {...password}
-        style={styles.input}
-        secureTextEntry={true}
-        placeholder={'Password'}
-      />
+        <TextInput
+          {...password}
+          style={styles.input}
+          secureTextEntry={true}
+          placeholder={'Password'}
+        />
 
-      <TextInput
-        {...identity}
-        style={styles.input}
-        placeholder={'Identity'}
-      />
+        <TextInput
+          {...identity}
+          style={styles.input}
+          placeholder={'Identity'}
+        />
 
-      <TextInput
-        {...origin}
-        style={styles.input}
-        placeholder={'Origin'}
-      />
+        <TextInput
+          {...origin}
+          style={styles.input}
+          placeholder={'Origin'}
+        />
 
-      <TouchableHighlight
-        style={styles.button}
-        activeOpacity={0.5}
-        underlayColor="#DDC"
-        onPress={handleSendToClockIn}
-      >
-        <Text style={styles.buttonText}>
-          Dale!
-        </Text>
-      </TouchableHighlight>
-    </Container>
+        <TouchableHighlight
+          style={styles.button}
+          activeOpacity={0.5}
+          onPress={handleSendToClockIn}
+        >
+          <Text style={styles.buttonText}>
+            Dale!
+          </Text>
+        </TouchableHighlight>
+
+        <Switch
+          style={styles.buttonDarkTheme}
+          value={dark}
+          onValueChange={val => {
+            setDark(val);
+          }}
+          thumbColor={{true: '#2a0866', false: '#673ab7'}}
+          trackColor={{true: '#292929', false: 'red'}}
+        />
+      </Container>
+    </ThemeProvider>
   );
 }
 
 const styles = StyleSheet.create({
   input: {
+    backgroundColor: '#fff',
     padding: 10,
     borderRadius: 10,
     marginLeft: 30,
     marginBottom: 20,
     marginRight: 30,
     borderWidth: 0.3,
+    borderColor: '#000000',
+    color: '#454446',
   },
 
   button: {
-    backgroundColor: '#AAAA',
+    backgroundColor:  '#2196F3',
     padding: 10,
     height: 50,
     flexDirection: 'row',
@@ -162,7 +182,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: 'hidden',
     alignItems: 'center',
-    marginTop: 280,
+    marginTop: 20,
   },
 
   buttonText: {
@@ -173,5 +193,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'Roboto_500Medium',
     fontSize: 16,
+  },
+
+  buttonDarkTheme: {
+    marginTop: 50,
+    marginRight: 215,
   },
 });
