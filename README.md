@@ -55,7 +55,7 @@ You will need an iOS Simulator, Android Emulator, or physical device to execute 
 * [x] Punch the clock
 * [ ] Store and display the relevant info like date and time of punch the clock
 * [ ] Scheduling for punch the clock
-* [ ] Dark theme ❤️
+* [*] Dark theme ❤️
 
 ## License
 
